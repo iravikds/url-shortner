@@ -2,22 +2,35 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import ShortUrl
+import random, string
 
-def index(request):
+def index(request, query=None):
     urls = ShortUrl.objects.all()
-    return render(request, 'index.html', { 'urls' : urls })
+    if not query or query is None:
+        return render(request, 'index.html', { 'urls' : urls })
+    else:
+        try:
+            check_db = ShortUrl.objects.get(shorturl = query)
+            check_db.visits = check_db.visits + 1
+            check_db.save()
+            get_full_url = check_db.url
+            return redirect(get_full_url)
+        except ShortUrl.DoesNotExist:
+            messages.error(request, "does not exists")
+            return redirect('/')
+
+def generate_random():
+    return ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
 
 def generate(request):
     if request.method == 'POST':
         #generate
         if request.POST['original'] and request.POST['short']:
             #generate based on user input
-            print(request.POST['original'])
-            print("request.POST['short']")
             original = request.POST['original']
             short = request.POST['short']
-            check = ShortUrl.objects.filter(shorturl = short)
-            if not check:
+            check_db = ShortUrl.objects.filter(shorturl = short)
+            if not check_db:
                 newurl = ShortUrl(
                     url = original,
                     shorturl = short
@@ -25,11 +38,24 @@ def generate(request):
                 newurl.save()
                 return redirect('/')
             else:
-                messages.error(request, "empty fields")
+                messages.error(request, "already exists")
                 return redirect('/')
         elif request.POST['original']:
             #generate random
-            pass
+            original = request.POST['original']
+            generated = False
+            while not generated:
+                short = generate_random()
+                check_db = ShortUrl.objects.filter(shorturl = short)
+                if not check_db:
+                    newurl = ShortUrl(
+                        url = original,
+                        shorturl = short
+                    )
+                    newurl.save()
+                    return redirect('/')
+                else:
+                    continue
         else:
             messages.error(request, "empty fields")
             return redirect('/')

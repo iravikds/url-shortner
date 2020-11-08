@@ -7,18 +7,40 @@
 </head>
 <body>
     <h1>URL shortener app</h1>
+
+    {% for message in messages %}
+         <div class="alert alert-success">
+            <a class="close" href="{% url 'index' %}" data-dismiss="alert">X</a>
+                {{ message }}
+        </div>
+    {% endfor %}
     <form action="{% url 'generate' %}" method="POST">
         {% csrf_token %}
-        <input type="url" name="original">
-        <input type="text" name="short">
+        <input type="url" name="original" placeholder="Enter URL">
+        <input type="text" name="short" placeholder="Customize URL" id="customUrl" style="display: none;">
         <input type="submit" value="Generate">
     </form>
+    <button onclick="myFunction()">Customize URL</button>
+    
+
 
     {% for u in urls %}
         <a href="{{ u.url }}">{{ u.url }}</a> ⟶
-        <a href="{{ u.url }}">http://urlsa.ga/{{ u.shorturl }}</a>
+        <a href="{{ u.shorturl }}">127.0.0.1:8000/{{ u.shorturl }}</a>
         {{ u.visits }}
         </br>
     {% endfor %}
+
+    <script>
+        function myFunction() {
+            var x = document.getElementById("customUrl");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                }
+            else {
+                x.style.display = "none";
+                }
+            } 
+    </script>
 </body>
 </html>
