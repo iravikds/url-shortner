@@ -2,11 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL shortener</title>
+    <title>URL Saga | urlsa.ga</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-    <h1>URL shortener app</h1>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">URLSAGA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Features</a>
+                <a class="nav-item nav-link" href="#">Pricing</a>
+                <a class="nav-item nav-link disabled" href="#">Disabled</a>
+              </div>
+            </div>
+          </nav>
 
     {% for message in messages %}
          <div class="alert alert-success">
@@ -16,21 +31,25 @@
     {% endfor %}
     <form action="{% url 'generate' %}" method="POST">
         {% csrf_token %}
-        <input type="url" name="original" placeholder="Enter URL">
-        <input type="text" name="short" placeholder="Customize URL" id="customUrl" style="display: none;">
-        <input type="submit" value="Generate">
+        <div class="form-group mt-5">
+            <input type="url" class="form-control" name="original" placeholder="Paste your URL here">
+            <input type="text" class="form-control" name="short" placeholder="Customize URL" id="customUrl" style="display: none;">
+            <input type="submit" class="form-control btn-primary" value="Generate">
+        </div>
     </form>
-    <button onclick="myFunction()">Customize URL</button>
+    <button onclick="myFunction()" class="form-control btn-primary">Customize URL</button>
     
-
-
+    </br>
+    <div class="m-5">
     {% for u in urls %}
-        <a href="{{ u.url }}">{{ u.url }}</a> ⟶
-        <a href="{{ u.shorturl }}">127.0.0.1:8000/{{ u.shorturl }}</a>
-        {{ u.visits }}
-        </br>
+    <ul>
+        <li><a href="{{ u.url }}">{{ u.url }}</a> ⟶
+            <a href="{{ u.shorturl }}">127.0.0.1:8000/{{ u.shorturl }}</a>
+            <span class="badge badge-pill badge-success">{{ u.visits }}</span>
+        </li>
+    </ul>
     {% endfor %}
-
+    </div>
     <script>
         function myFunction() {
             var x = document.getElementById("customUrl");
@@ -42,5 +61,6 @@
                 }
             } 
     </script>
+    </div>
 </body>
 </html>
