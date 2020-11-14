@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-    <div class="container">
+    
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">URLSAGA</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,7 @@
               </div>
             </div>
           </nav>
-
+          <div class="container">
     {% for message in messages %}
          <div class="alert alert-success">
             <a class="close" href="{% url 'index' %}" data-dismiss="alert">X</a>
@@ -32,35 +32,35 @@
     <form action="{% url 'generate' %}" method="POST">
         {% csrf_token %}
         <div class="form-group mt-5">
-            <input type="url" class="form-control" name="original" placeholder="Paste your URL here">
-            <input type="text" class="form-control" name="short" placeholder="Customize URL" id="customUrl" style="display: none;">
+            <input type="url" class="form-control mb-2" name="original" placeholder="Paste your URL here">
+            
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">https://urlsa.ga/</div>
+                </div>
+                <input type="text" class="form-control" name="short" placeholder="Custom URL">
+              </div>
             <input type="submit" class="form-control btn-primary" value="Generate">
         </div>
     </form>
-    <button onclick="myFunction()" class="form-control btn-primary">Customize URL</button>
     
     </br>
     <div class="m-5">
-    {% for u in urls %}
-    <ul>
-        <li><a href="{{ u.url }}">{{ u.url }}</a> ⟶
-            <a href="{{ u.shorturl }}">127.0.0.1:8000/{{ u.shorturl }}</a>
-            <span class="badge badge-pill badge-success">{{ u.visits }}</span>
-        </li>
-    </ul>
-    {% endfor %}
+    
+    <table class="table table-hover table-bordered">
+        <tbody>
+            {% for u in urls %}
+            <tr>
+                <td><a href="{{ u.url }}">{{ u.url }}</a></td>
+                <td><a href="{{ u.shorturl }}">https://urlsa.ga/{{ u.shorturl }} </a><span class="badge badge-pill badge-success"> {{ u.visits }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    
     </div>
-    <script>
-        function myFunction() {
-            var x = document.getElementById("customUrl");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-                }
-            else {
-                x.style.display = "none";
-                }
-            } 
-    </script>
+    
     </div>
 </body>
 </html>
