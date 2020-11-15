@@ -18,7 +18,13 @@
                 <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" href="#">Features</a>
                 <a class="nav-item nav-link" href="#">Pricing</a>
-                <a class="nav-item nav-link disabled" href="#">Disabled</a>
+                <a class="nav-item nav-link" href="/accounts/login">
+                  {% if user.is_authenticated %}
+                  {{ user.username }}
+                  {% else %}
+                  Login
+                  {% endif %}
+                </a>
               </div>
             </div>
           </nav>
@@ -33,13 +39,17 @@
         {% csrf_token %}
         <div class="form-group mt-5">
             <input type="url" class="form-control mb-2" name="original" placeholder="Paste your URL here">
-            
+            {% if user.is_authenticated %}
             <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">https://urlsa.ga/</div>
-                </div>
-                <input type="text" class="form-control" name="short" placeholder="Custom URL">
+              <div class="input-group-prepend">
+                <div class="input-group-text">https://urlsa.ga/</div>
               </div>
+              <input type="text" class="form-control" name="short" placeholder="Custom URL">
+            </div>
+            {% else %}
+            <p><a href="/accounts/login">Login</a> to customize URL</p>
+            {% endif %}
+            
             <input type="submit" class="form-control btn-primary" value="Generate">
         </div>
     </form>

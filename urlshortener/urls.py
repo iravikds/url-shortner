@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('urlshort.urls')),
     path('generate/', generate, name='generate'),
     path('<str:query>/', index, name='index'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
